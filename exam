@@ -5,6 +5,15 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score, mean_squared_error
 import matplotlib.pyplot as plt
 
+
+
+##
+####
+####
+#ABBEY WAS HERE 
+#
+#
+###
 # Load the dataset
 file_path = "C:/Users/tracya16/Downloads/Restaurant Revenue.xlsx"
 df = pd.read_excel(file_path)
