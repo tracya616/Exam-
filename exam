@@ -1,5 +1,71 @@
-for i in range(1, 11):
-    print(i)
-#c9de\\
-    
-    
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score, mean_squared_error
+import matplotlib.pyplot as plt
+
+# Load the dataset
+file_path = "C:/Users/tracya16/Downloads/Restaurant Revenue.xlsx"
+df = pd.read_excel(file_path)
+
+# Selecting the independent variables (features)
+X = df[['Number_of_Customers', 'Menu_Price', 'Marketing_Spend', 'Average_Customer_Spending', 'Promotions', 'Reviews']]
+
+# Selecting the dependent variable (target)
+y = df['Monthly_Revenue']
+
+# Splitting the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Creating the linear regression model
+model = LinearRegression()
+
+# Training the model
+model.fit(X_train, y_train)
+
+# Making predictions on the testing set
+y_pred = model.predict(X_test)
+
+# Regression statistics
+r_squared = r2_score(y_test, y_pred)
+mse = mean_squared_error(y_test, y_pred)
+coefficients = model.coef_
+intercept = model.intercept_
+
+print("R-squared:", r_squared)
+print("Mean Squared Error:", mse)
+print("Coefficients:", coefficients)
+print("Intercept:", intercept)
+
+# Visualizing actual vs. predicted values
+plt.scatter(y_test, y_pred)
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], 'r', label='Actual = Predicted')
+plt.xlabel('Actual Monthly Revenue')
+plt.ylabel('Predicted Monthly Revenue')
+plt.title('Actual vs. Predicted Monthly Revenue')
+plt.legend()
+plt.show()
+
+# Predicting next month's revenue using regression coefficients
+next_month_features = {
+    'Number_of_Customers': 1000,
+    'Menu_Price': 20,
+    'Marketing_Spend': 5000,
+    'Average_Customer_Spending': 25,
+    'Promotions': 2,
+    'Reviews': 50
+}
+
+# Calculate the predicted revenue using the regression coefficients
+next_month_revenue = (
+    next_month_features['Number_of_Customers'] * coefficients[0] +
+    next_month_features['Menu_Price'] * coefficients[1] +
+    next_month_features['Marketing_Spend'] * coefficients[2] +
+    next_month_features['Average_Customer_Spending'] * coefficients[3] +
+    next_month_features['Promotions'] * coefficients[4] +
+    next_month_features['Reviews'] * coefficients[5] +
+    intercept
+)
+
+print("Predicted next month's revenue using regression:", next_month_revenue)
